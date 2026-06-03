@@ -9,16 +9,15 @@
 #
 # Replace each TODO comment with the correct Dockerfile instruction.
 
-# TODO: set the base image
-FROM TODO
+FROM python:3.11-slim
 
 WORKDIR /app
 
-# TODO: copy requirements.txt (before source — this keeps the install layer cached)
+COPY requirements.txt .
 
-# TODO: install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# TODO: copy source code
+COPY src/ src/
+COPY data/ data/
 
-# TODO: set the command that runs when the container starts
-CMD ["TODO"]
+CMD ["python", "-m", "src.pipeline"]

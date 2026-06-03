@@ -15,7 +15,7 @@ name: CI
 
 on:
   push:
-    branches: ["TODO-replace-with-main"]
+    branches: ["main"]
   pull_request:
 
 jobs:
@@ -29,10 +29,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Lint
-        run: echo "TODO implement this step"
+        run: ruff check src tests
       - name: Format
-        run: echo "TODO implement this step"
+        run: ruff format --check src tests
       - name: Test
-        run: echo "TODO implement this step"
+        run: pytest -q
       - name: Build image
-        run: echo "TODO implement this step"
+        run: docker build -t pavel-tisner-pipeline:${{ github.sha }} .

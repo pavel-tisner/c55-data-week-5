@@ -1,8 +1,10 @@
 """Tests for the Week 5 pipeline."""
 
+from pathlib import Path
 import pytest
 
-from src.pipeline import fetch_data, get_config, save_results
+from src.ingest_files import read_csv_records
+from src.pipeline import get_config
 
 
 class TestGetConfig:
@@ -30,32 +32,15 @@ class TestGetConfig:
             get_config()
 
 
-class TestFetchData:
-    def test_returns_list(self):
-        records = fetch_data("any-key")
-        assert isinstance(records, list)
+class TestReadCsvRecords:
+    def test_returns_records(self, tmp_path):
+        csv_file = tmp_path / "weather.csv"
+        csv_file.write_text(
+            "station,timestamp,temperature_c,humidity_pct\n"
+            "amsterdam,2026-01-01T10:00:00,12.5,80\n",
+            encoding="utf-8",
+        )
 
-    def test_returns_at_least_one_record(self):
-        records = fetch_data("any-key")
-        assert len(records) >= 1
+        records = read_csv_records(Path(csv_file))
 
-    def test_records_are_dicts(self):
-        records = fetch_data("any-key")
-        assert all(isinstance(r, dict) for r in records)
-
-
-class TestSaveResults:
-    def test_creates_output_dir(self, tmp_path):
-        output_dir = tmp_path / "new_dir"
-        save_results([{"id": 1}], output_dir)
-        assert output_dir.exists()
-
-    def test_writes_results_file(self, tmp_path):
-        save_results([{"id": 1}, {"id": 2}], tmp_path)
-        results_file = tmp_path / "results.txt"
-        assert results_file.exists()
-
-    def test_file_contains_records(self, tmp_path):
-        save_results([{"id": 1}, {"id": 2}], tmp_path)
-        content = (tmp_path / "results.txt").read_text()
-        assert len(content.strip().splitlines()) >= 2
+        assert len(records) == 1

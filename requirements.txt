@@ -1,13 +1,4 @@
-# Task 2: Pin every dependency your pipeline uses.
-#
-# Format: package==version
-# Example: requests==2.31.0
-#
-# Find the current version of any package:
-#   pip show <package>
-#
-# Always include pytest and ruff:
-# pytest==
-# ruff==
-#
-# Add your pinned dependencies below:
+pydantic==2.13.4
+pytest==9.0.3
+requests==2.34.2
+ruff==0.15.15
